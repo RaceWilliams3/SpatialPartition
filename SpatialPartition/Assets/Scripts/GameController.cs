@@ -21,7 +21,9 @@ public class GameController : MonoBehaviour
     float mapWidth = 50f;
     int cellSize = 10;
 
-    int numberOfSoldiers = 1000;
+    public int numberOfSoldiers = 1000;
+
+    bool usePartition = true;
 
     Grid grid;
 
@@ -65,7 +67,19 @@ public class GameController : MonoBehaviour
 
         for (int i = 0; i < friendlySoldiers.Count; i++)
         {
-            Soldier closestEnemy = grid.FindClosestEnemy(friendlySoldiers[i]);
+
+            Soldier closestEnemy;
+
+            if (usePartition)
+            {
+                closestEnemy = grid.FindClosestEnemy(friendlySoldiers[i]);
+            }
+            else
+            {
+                closestEnemy = FindClosestEnemySlow(friendlySoldiers[i]);
+            }
+            
+
 
             if (closestEnemy != null)
             {
@@ -76,6 +90,11 @@ public class GameController : MonoBehaviour
                 friendlySoldiers[i].Move(closestEnemy);
             }
         }
+    }
+
+    public void TogglePartition()
+    {
+        usePartition = !usePartition;
     }
 
     Soldier FindClosestEnemySlow(Soldier soldier)
