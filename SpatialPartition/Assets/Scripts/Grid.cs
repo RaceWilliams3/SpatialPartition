@@ -6,25 +6,26 @@ public class Grid
 {
     int cellSize;
 
-    Soldier[,] cells;
+    Soldier[,,] cells;
 
     public Grid(int mapWidth, int cellSize)
     {
         this.cellSize = cellSize;
         int numberOfCells = mapWidth / cellSize;
 
-        cells = new Soldier[numberOfCells, numberOfCells];
+        cells = new Soldier[numberOfCells, numberOfCells, numberOfCells];
     }
 
     public void Add(Soldier soldier)
     {
         int cellx = (int)(soldier.soldierTrans.position.x / cellSize);
-        int cellz = (int)(soldier.soldierTrans.position.y / cellSize);
+        int celly = (int)(soldier.soldierTrans.position.y / cellSize);
+        int cellz = (int)(soldier.soldierTrans.position.z / cellSize);
 
         soldier.previousSoldier = null;
-        soldier.nextSoldier = cells[cellx,cellz];
+        soldier.nextSoldier = cells[cellx,celly,cellz];
 
-        cells[cellx,cellz] = soldier;
+        cells[cellx,celly,cellz] = soldier;
 
         if (soldier.nextSoldier != null)
         {
@@ -35,9 +36,10 @@ public class Grid
     public Soldier FindClosestEnemy(Soldier friendlySoldier)
     {
         int cellx = (int)(friendlySoldier.soldierTrans.position.x / cellSize);
-        int cellz = (int)(friendlySoldier.soldierTrans.position.y / cellSize);
+        int celly = (int)(friendlySoldier.soldierTrans.position.y / cellSize);
+        int cellz = (int)(friendlySoldier.soldierTrans.position.z / cellSize);
 
-        Soldier enemy = cells[cellx, cellz];
+        Soldier enemy = cells[cellx, celly, cellz];
 
         Soldier closestSoldier = null;
 
@@ -63,12 +65,14 @@ public class Grid
     public void Move(Soldier soldier, Vector3 oldPos)
     {
         int oldCellx = (int)(oldPos.x / cellSize);
+        int oldCelly = (int)(oldPos.y / cellSize);
         int oldCellz = (int)(oldPos.z / cellSize);
 
         int cellx = (int)(soldier.soldierTrans.position.x / cellSize);
-        int cellz = (int)(soldier.soldierTrans.position.y / cellSize);
+        int celly = (int)(soldier.soldierTrans.position.y / cellSize);
+        int cellz = (int)(soldier.soldierTrans.position.z / cellSize);
 
-        if (oldCellx == cellx && oldCellz == cellz)
+        if (oldCellx == cellx && oldCelly == celly && oldCellz == cellz)
         {
             return;
         }
@@ -81,9 +85,9 @@ public class Grid
             soldier.nextSoldier.previousSoldier = soldier.previousSoldier;
         }
 
-        if (cells[oldCellx, oldCellz] == soldier)
+        if (cells[oldCellx, oldCelly, oldCellz] == soldier)
         {
-            cells[oldCellx, oldCellz] = soldier.nextSoldier;
+            cells[oldCellx, oldCelly, oldCellz] = soldier.nextSoldier;
         }
 
         Add(soldier);

@@ -33,7 +33,9 @@ public class GameController : MonoBehaviour
 
         for (int i = 0; i < numberOfSoldiers; i++)
         {
-            Vector3 randomPos = new Vector3(Random.Range(0f, mapWidth), 0.5f, Random.Range(0f, mapWidth));
+
+            //Create a random enemy
+            Vector3 randomPos = new Vector3(Random.Range(0f, mapWidth), Random.Range(0f, mapWidth), Random.Range(0f, mapWidth));
 
             GameObject newEnemy = Instantiate(enemyObj, randomPos, Quaternion.identity) as GameObject;
 
@@ -41,7 +43,9 @@ public class GameController : MonoBehaviour
 
             newEnemy.transform.parent = enemyParent;
 
-            randomPos = new Vector3(Random.Range(0f, mapWidth), 0.5f, Random.Range(0f, mapWidth));
+
+            //Create a random friendly
+            randomPos = new Vector3(Random.Range(0f, mapWidth), Random.Range(0f, mapWidth), Random.Range(0f, mapWidth));
 
             GameObject newFriendly = Instantiate(friendlyObj, randomPos, Quaternion.identity) as GameObject;
 
